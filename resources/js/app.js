@@ -8,6 +8,7 @@ const { default: Axios } = require('axios');
 const { Toast } = require('bootstrap');
 const { toSafeInteger } = require('lodash');
 const { default: Swal } = require('sweetalert2');
+import $ from 'jquery';
 require('./bootstrap');
 window.Vue = require('vue');
 
@@ -39,20 +40,36 @@ const app = new Vue({
     },
 
     data: {
-        customers: []
+        customers: [],
+        newName: '',
+        newAddress: '',
+        newPhoneNumber: '',
+        fillCustomer: {
+            'id': '', 
+            'name': '', 
+            'address': '',
+            'phoneNumber': ''},
+        errors: []
+
     },
 
     methods: {
         getCustomers: function() {
-            var urlCustomers = 'customers';
+            let urlCustomers = 'customers';
             
             Axios.get(urlCustomers).then(response => {
                 console.log(response.data);
                 this.customers = response.data
             });
         },
+        editCustomer: function(customer) {
+            this.fillCustomer.name = customer.name;
+            this.fillCustomer.address = customer.address;
+            this.fillCustomer.phoneNumber = customer.phoneNumber;
+            $('#edit').modal('show');
+        },
         deleteCustomer: function(customerId){
-            var url = 'customers/' + customerId;
+            let url = 'customers/' + customerId;
             Axios.delete(url).then(response => {
                 this.getCustomers();
                 Swal.fire({
@@ -67,6 +84,39 @@ const app = new Vue({
                     background: "#a5dc86",
                   });                  
             });
+            
+
+        },
+        createCustomer: function() {
+            let url = 'customers';
+            Axios.post(url, {
+                name: this.newName,
+                address: this.newAddress,
+                phone_number: this.newPhoneNumber
+            }).then(response =>{
+                this.getCustomers();
+                this.newName = '';
+                this.newAddress = '';
+                this.newPhoneNumber = '';
+                this.errors = [];
+                document.getElementById('close-modal').click();
+                //document.getElementById('create').ariaModal;
+                Swal.fire({
+                    title: 'Registro creado.',
+                    icon:'success',
+                    timer: 1500,
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton:false,
+                    color:'white',
+                    iconColor: 'white',
+                    background: "#a5dc86",
+                  });       
+            }).catch(error =>{
+                this.errors = error.response.data
+                $
+
+            })
             
 
         }

@@ -53600,9 +53600,13 @@ module.exports = function(module) {
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
   \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -53619,6 +53623,8 @@ var _require3 = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.
 
 var _require4 = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js"),
     Swal = _require4["default"];
+
+
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
@@ -53646,7 +53652,17 @@ var app = new Vue({
     this.getCustomers();
   },
   data: {
-    customers: []
+    customers: [],
+    newName: '',
+    newAddress: '',
+    newPhoneNumber: '',
+    fillCustomer: {
+      'id': '',
+      'name': '',
+      'address': '',
+      'phoneNumber': ''
+    },
+    errors: []
   },
   methods: {
     getCustomers: function getCustomers() {
@@ -53657,6 +53673,12 @@ var app = new Vue({
         console.log(response.data);
         _this.customers = response.data;
       });
+    },
+    editCustomer: function editCustomer(customer) {
+      this.fillCustomer.name = customer.name;
+      this.fillCustomer.address = customer.address;
+      this.fillCustomer.phoneNumber = customer.phoneNumber;
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()('#edit').modal('show');
     },
     deleteCustomer: function deleteCustomer(customerId) {
       var _this2 = this;
@@ -53676,6 +53698,39 @@ var app = new Vue({
           iconColor: 'white',
           background: "#a5dc86"
         });
+      });
+    },
+    createCustomer: function createCustomer() {
+      var _this3 = this;
+
+      var url = 'customers';
+      Axios.post(url, {
+        name: this.newName,
+        address: this.newAddress,
+        phone_number: this.newPhoneNumber
+      }).then(function (response) {
+        _this3.getCustomers();
+
+        _this3.newName = '';
+        _this3.newAddress = '';
+        _this3.newPhoneNumber = '';
+        _this3.errors = [];
+        document.getElementById('close-modal').click(); //document.getElementById('create').ariaModal;
+
+        Swal.fire({
+          title: 'Registro creado.',
+          icon: 'success',
+          timer: 1500,
+          toast: true,
+          position: 'top',
+          showConfirmButton: false,
+          color: 'white',
+          iconColor: 'white',
+          background: "#a5dc86"
+        });
+      })["catch"](function (error) {
+        _this3.errors = error.response.data;
+        jquery__WEBPACK_IMPORTED_MODULE_0___default.a;
       });
     }
   }

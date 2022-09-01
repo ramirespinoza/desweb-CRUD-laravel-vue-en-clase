@@ -23,7 +23,7 @@
                     <td>@{{ customer.name }}</td>
                     <td>@{{ customer.address}}</td>
                     <td>@{{ customer.phone_number }}</td>
-                    <td width="10px" ><a href="#" class="btn btn-warnign btn-sm">Edit</a> </td>
+                    <td width="10px" ><a href="#" class="btn btn-warnign btn-sm" v-on:click.prevent="editCustomer(customer)">Edit</a> </td>
                     <td width="10px" ><a href="#" class="btn btn-danger btn-sm" v-on:click.prevent="deleteCustomer(customer.id)">Delete</a></td>
                 </tr>
                 <tr>
@@ -44,6 +44,7 @@
             </tbody>
         </table>
         @include('create')
+        @include('edit')
     </div>
     <div class="col-sm-5">
         <pre>

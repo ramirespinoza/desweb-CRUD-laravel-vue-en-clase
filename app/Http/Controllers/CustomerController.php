@@ -14,7 +14,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $customers = Customer::get();
+        $customers = Customer::orderBy('id', 'DESC')->get();
 
         return $customers;
     }
@@ -37,7 +37,15 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required',
+            'address' => 'required',
+            'phone_number' => 'required',
+        ]);
+
+        Customer::create($request->all());
+
+        return;
     }
 
     /**
