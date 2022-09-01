@@ -18,4 +18,4 @@ Route::get('/', function () {
 });
 
 
-Route::resource('customer', 'CustomerController', ['except' => 'show']);
+Route::resource('customers', 'CustomerController', ['except' => 'show']);

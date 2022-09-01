@@ -4,8 +4,11 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+const { default: Axios } = require('axios');
+const { Toast } = require('bootstrap');
+const { toSafeInteger } = require('lodash');
+const { default: Swal } = require('sweetalert2');
 require('./bootstrap');
-
 window.Vue = require('vue');
 
 /**
@@ -29,4 +32,44 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 const app = new Vue({
     el: '#app',
+
+    
+    created: function(){
+        this.getCustomers()
+    },
+
+    data: {
+        customers: []
+    },
+
+    methods: {
+        getCustomers: function() {
+            var urlCustomers = 'customers';
+            
+            Axios.get(urlCustomers).then(response => {
+                console.log(response.data);
+                this.customers = response.data
+            });
+        },
+        deleteCustomer: function(customerId){
+            var url = 'customers/' + customerId;
+            Axios.delete(url).then(response => {
+                this.getCustomers();
+                Swal.fire({
+                    title: 'Registro eliminado.',
+                    icon:'success',
+                    timer: 1500,
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton:false,
+                    color:'white',
+                    iconColor: 'white',
+                    background: "#a5dc86",
+                  });                  
+            });
+            
+
+        }
+    }
+
 });
