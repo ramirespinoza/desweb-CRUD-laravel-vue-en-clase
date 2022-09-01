@@ -9,6 +9,7 @@ const { Toast } = require('bootstrap');
 const { toSafeInteger } = require('lodash');
 const { default: Swal } = require('sweetalert2');
 import $ from 'jquery';
+import { success } from 'toastr';
 require('./bootstrap');
 window.Vue = require('vue');
 
@@ -48,12 +49,25 @@ const app = new Vue({
             'id': '', 
             'name': '', 
             'address': '',
-            'phoneNumber': ''},
+            'phone_number': ''},
         errors: []
 
     },
 
     methods: {
+        getToast: function(message) {
+            Swal.fire({
+                title: message,
+                icon:'success',
+                timer: 1500,
+                toast: true,
+                position: 'top',
+                showConfirmButton:false,
+                color:'white',
+                iconColor: 'white',
+                background: "#a5dc86",
+              });       
+        },
         getCustomers: function() {
             let urlCustomers = 'customers';
             
@@ -63,26 +77,35 @@ const app = new Vue({
             });
         },
         editCustomer: function(customer) {
+            this.fillCustomer.id = customer.id;
             this.fillCustomer.name = customer.name;
             this.fillCustomer.address = customer.address;
-            this.fillCustomer.phoneNumber = customer.phoneNumber;
+            this.fillCustomer.phone_number = customer.phone_number;
             $('#edit').modal('show');
+        },
+        updateCustomer: function(customerId){
+            let url = 'customers/' + customerId;
+            Axios.put(url, this.fillCustomer).then(response =>{
+                this.getCustomers();
+                this.fillCustomer = {
+                    'id': '', 
+                    'name': '', 
+                    'address': '',
+                    'phone_number': ''};
+                this.errors = [];
+                $('#edit').modal('hide');
+                this.getToast("Customer updated.");
+
+            }).catch(error => {
+                this.errors = error.response.data
+            });
+
         },
         deleteCustomer: function(customerId){
             let url = 'customers/' + customerId;
             Axios.delete(url).then(response => {
                 this.getCustomers();
-                Swal.fire({
-                    title: 'Registro eliminado.',
-                    icon:'success',
-                    timer: 1500,
-                    toast: true,
-                    position: 'top',
-                    showConfirmButton:false,
-                    color:'white',
-                    iconColor: 'white',
-                    background: "#a5dc86",
-                  });                  
+                this.getToast('Customer deleted.')
             });
             
 
@@ -101,17 +124,7 @@ const app = new Vue({
                 this.errors = [];
                 document.getElementById('close-modal').click();
                 //document.getElementById('create').ariaModal;
-                Swal.fire({
-                    title: 'Registro creado.',
-                    icon:'success',
-                    timer: 1500,
-                    toast: true,
-                    position: 'top',
-                    showConfirmButton:false,
-                    color:'white',
-                    iconColor: 'white',
-                    background: "#a5dc86",
-                  });       
+                this.getToast("Customer created.")
             }).catch(error =>{
                 this.errors = error.response.data
                 $

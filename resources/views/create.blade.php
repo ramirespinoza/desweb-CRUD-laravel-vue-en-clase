@@ -23,7 +23,7 @@
             <span v-for="error in errors" class="text-danger">@{{ error }}</span>
         </div>
         <div class="modal-footer">
-            <input type="submit" class="btn btn-primary" value="Guardar">
+            <input type="submit" class="btn btn-primary" value="Create">
         </div>
       </div>
     </div>

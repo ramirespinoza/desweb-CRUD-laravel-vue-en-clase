@@ -14,16 +14,16 @@
             </div>
             <div class="mb-3">
                 <label for="address">Address</label>
-                <input type="text" name="address" class="form-control" v-model="fillCustomer.adress">
+                <input type="text" name="address" class="form-control" v-model="fillCustomer.address">
             </div>
             <div class="mb-3">
-                <label for="phoneNumber">Phone Number</label>
-                <input type="text" name="phoneNumber" class="form-control" v-model="fillCustomer.phoneNumber">
+                <label for="phone_number">Phone Number</label>
+                <input type="text" name="phone_number" class="form-control" v-model="fillCustomer.phone_number">
             </div>
             <span v-for="error in errors" class="text-danger">@{{ error }}</span>
         </div>
         <div class="modal-footer">
-            <input type="submit" class="btn btn-primary" value="Guardar">
+            <input type="submit" class="btn btn-primary" value="Update">
         </div>
       </div>
     </div>

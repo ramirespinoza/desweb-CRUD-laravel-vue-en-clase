@@ -81,7 +81,14 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required',
+            'address' => 'required',
+            'phone_number' => 'required',
+        ]);
+
+        Customer::find($id)->update($request->all());
+        return;
     }
 
     /**
